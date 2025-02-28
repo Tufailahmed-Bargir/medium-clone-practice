@@ -2,7 +2,7 @@ import { PrismaClient } from "@prisma/client/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import { Hono } from "hono";
 import { sign } from "hono/jwt";
-import { SigninSchema, SigninTypes, SignupSchema } from "@ahmed_bargir/medium_types_new";
+import { SigninSchema,  SignupSchema } from "@ahmed_bargir/medium_types_new";
 
 import bcrypt from 'bcryptjs'
  
@@ -13,9 +13,7 @@ export const userRouter = new Hono<{
     }
 }>();
 
-userRouter.get('/signup', (c)=>{
-    return c.text('this is from signup page')
-})
+ 
 userRouter.post('/signup', async (c) => {
    try {
     console.log('database url  is ', c.env.DATABASE_URL);
@@ -62,7 +60,7 @@ userRouter.post('/signup', async (c) => {
       
       const token = await sign({ id: user.id }, c.env.JWT_SECRET)
      
-    
+      c.status(200)
       return c.json({
         msg:"user created success",
         success:true,
