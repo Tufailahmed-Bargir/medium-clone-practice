@@ -1,14 +1,16 @@
-'use client'
+ 
 import { useForm } from "react-hook-form";
 import { SignupSchema, SignupTypes } from "@ahmed_bargir/medium_types_new";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from 'axios'
 import { Toaster, toast } from 'sonner';
-import process from "node:process";
-// import { useNavigate } from "react-router-dom";
+import { BACKEND_URL } from "../config";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
  
 export default function SignUpForm() {
-//    const navigate = useNavigate()
+  const [loading, setloading]=useState(false)
+   const navigate = useNavigate()
   const {
     register,
     handleSubmit,
@@ -18,21 +20,32 @@ export default function SignUpForm() {
   });
 
   const onSubmit = async (data: SignupTypes) => {
-   const response = await axios.post(process.env.BACKEND_URL``,data)
-  
-
-    console.log("Form Data:", data);
-    console.log("response:", response.data);
-    if(response.data.success){
-        localStorage.setItem("token", response.data.token);
-      setTimeout(()=>{
-          toast.success('user created success')
-
-        },1000)
-        // navigate("/login"); 
-    }else{
-        toast.error(response.data.msg)   
-    }
+    setloading(true)
+   try {
+    
+    console.log('data posting is ', data);
+    
+    const response = await axios.post(`${BACKEND_URL}/user/signup`,data)
+   
+ 
+     console.log("Form Data:", data);
+     console.log("response:", response.data);
+     if(response.data.success){
+         localStorage.setItem("token", response.data.jwt);
+       setTimeout(()=>{
+         
+         navigate("/signin"); 
+      },1000)
+      toast.success('user created success')
+     }else{
+         toast.error(response.data.msg)   
+     }
+   } catch (error) {
+    console.log('error found', error.message);
+    
+   } finally{
+    setloading(false)
+   }
   };
 
   return (
@@ -90,9 +103,43 @@ export default function SignUpForm() {
             </div>
 
             {/* Submit Button */}
-            <button type="submit" className="w-full py-3 px-4 bg-black text-white rounded-md hover:bg-gray-800 transition-colors">
-              Sign Up
-            </button>
+            {/* <button type="submit" className="w-full py-3 px-4 bg-black text-white rounded-md hover:bg-gray-800 transition-colors">
+              {loading?'Sign up ...': 'Sign Up'}
+            </button> */}
+
+<button
+  type="submit"
+  className="w-full py-3 px-4 bg-black text-white rounded-md hover:bg-gray-800 transition-colors flex justify-center items-center"
+  disabled={loading} // Disable button while loading
+>
+  {loading ? (
+    <>
+      <svg
+        className="animate-spin h-5 w-5 mr-2 text-white"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+      >
+        <circle
+          className="opacity-25"
+          cx="12"
+          cy="12"
+          r="10"
+          stroke="currentColor"
+          strokeWidth="4"
+        ></circle>
+        <path
+          className="opacity-75"
+          fill="currentColor"
+          d="M4 12a8 8 0 018-8v8H4z"
+        ></path>
+      </svg>
+      Signing up...
+    </>
+  ) : (
+    "Sign Up"
+  )}
+</button>
           </div>
         </div>
       </div>

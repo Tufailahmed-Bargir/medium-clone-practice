@@ -5,8 +5,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { Toaster, toast } from "sonner";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { BACKEND_URL } from "../config";
  
 export default function SignInForm() {
+  const [loading, setloaing]=useState(false)
   const navigate = useNavigate()
   const {
     register,
@@ -18,9 +21,11 @@ export default function SignInForm() {
 
   // Handle form submission
   const onSubmit = async (data: SigninTypes) => {
+    setloaing(true)
     try {
+
       
-      const response = await axios.post('/api/login', data);
+      const response = await axios.post(`${BACKEND_URL}/user/signin`, data);
       console.log("Response:", response.data);
 
       // On success, store token and navigate to the dashboard or home
@@ -36,6 +41,8 @@ export default function SignInForm() {
       }
     } catch (error:any) {
       toast.error("Something went wrong!"+error.message);
+    }finally{
+      setloaing(false)
     }
   };
 
@@ -91,11 +98,38 @@ export default function SignInForm() {
 
               {/* Submit Button */}
               <button
-                type="submit"
-                className="w-full py-3 px-4 bg-black text-white rounded-md hover:bg-gray-800 transition-colors"
-              >
-                Sign In
-              </button>
+  type="submit"
+  className="w-full py-3 px-4 bg-black text-white rounded-md hover:bg-gray-800 transition-colors flex justify-center items-center"
+  disabled={loading} // Disable button while loading
+>
+  {loading ? (
+    <>
+      <svg
+        className="animate-spin h-5 w-5 mr-2 text-white"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+      >
+        <circle
+          className="opacity-25"
+          cx="12"
+          cy="12"
+          r="10"
+          stroke="currentColor"
+          strokeWidth="4"
+        ></circle>
+        <path
+          className="opacity-75"
+          fill="currentColor"
+          d="M4 12a8 8 0 018-8v8H4z"
+        ></path>
+      </svg>
+      Signing up...
+    </>
+  ) : (
+    "Sign in"
+  )}
+</button>
             </div>
           </div>
         </div>
