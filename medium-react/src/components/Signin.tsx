@@ -30,16 +30,17 @@ export default function SignInForm() {
 
       // On success, store token and navigate to the dashboard or home
       if (response.data.success) {
-        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("token", response.data.jwt);
         toast.success("Login successful!");
         setTimeout(()=>{
 
-            navigate("/"); 
+            navigate("/create"); 
         },1000)
       } else {
         toast.error(response.data.msg);
       }
-    } catch (error:any) {
+    } catch (error:unknown) {
+      // @ts-expect-error error type
       toast.error("Something went wrong!"+error.message);
     }finally{
       setloaing(false)

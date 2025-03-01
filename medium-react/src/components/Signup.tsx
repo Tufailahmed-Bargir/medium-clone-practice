@@ -40,7 +40,8 @@ export default function SignUpForm() {
      }else{
          toast.error(response.data.msg)   
      }
-   } catch (error) {
+   } catch (error:unknown) {
+    // @ts-expect-error error-type
     console.log('error found', error.message);
     
    } finally{

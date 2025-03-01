@@ -12,7 +12,7 @@ export function useGetBlogs() {
       try {
         const response = await axios.get("http://127.0.0.1:8787/api/v1/blog/blogs",{
             headers:{
-                Authorization:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImNtN291NGZidzAwMDAxMDB3OXVmcG5oczIifQ._cK0uLH_hveutFu9gg7VbujkZVhVdBkAV4UBetSAesU'
+                Authorization:localStorage.getItem('token')
             }
         });
         console.log('posts are');
