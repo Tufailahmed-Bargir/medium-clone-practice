@@ -94,7 +94,7 @@ bookRouter.put('/update', async (c) => {
 	}
 });
 
-bookRouter.get('/post/:id', async (c) => {
+bookRouter.get('/blog/:id', async (c) => {
 	const id = c.req.param('id');
 	const prisma = new PrismaClient({
 		datasourceUrl: c.env?.DATABASE_URL	,
@@ -115,8 +115,11 @@ bookRouter.get('/blogs', async (c) => {
 		datasourceUrl: c.env?.DATABASE_URL	,
 	}).$extends(withAccelerate());
 	
-	const post = await prisma.blog.findMany({})
+	const posts = await prisma.blog.findMany({})
 
-	return c.json(post);
+	return c.json(
+
+		{posts}
+	);
 })
 
