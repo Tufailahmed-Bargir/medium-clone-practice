@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { BACKEND_URL } from "../config";
 
 export function useGetBlogs() {
   const [blogs, setBlogs] = useState([]);
@@ -46,16 +47,16 @@ export function useGetSingleBlog({id}:{id:string|undefined}) {
       try {
         console.log('id recieved is ', id);
         
-        const response = await axios.get(`http://127.0.0.1:8787/api/v1/blog/blog/${id}`,{
+        const response = await axios.get(`${BACKEND_URL}/blog/blog/${id}`,{
             headers:{ 
-                Authorization:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImNtN291NGZidzAwMDAxMDB3OXVmcG5oczIifQ._cK0uLH_hveutFu9gg7VbujkZVhVdBkAV4UBetSAesU'
+                Authorization:localStorage.getItem('token')
             }
         });
         console.log('a single post are');
         
         console.log(response.data);
         
-        setBlogs(response.data.posts);
+        setBlogs(response.data.post);
       } catch (err: any) {
         setError(err.message);
       } finally {
