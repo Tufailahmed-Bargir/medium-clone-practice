@@ -4,6 +4,7 @@ import { SignupSchema, SignupTypes } from "@ahmed_bargir/medium_types_new";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from 'axios'
 import { Toaster, toast } from 'sonner';
+import process from "node:process";
 // import { useNavigate } from "react-router-dom";
  
 export default function SignUpForm() {
@@ -17,7 +18,7 @@ export default function SignUpForm() {
   });
 
   const onSubmit = async (data: SignupTypes) => {
-   const response = await axios.post('/api/signup',data)
+   const response = await axios.post(process.env.BACKEND_URL``,data)
   
 
     console.log("Form Data:", data);
