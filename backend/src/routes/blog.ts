@@ -109,7 +109,7 @@ bookRouter.get('/blog/:id', async (c) => {
 		}
 	});
 
-	return c.json(post);
+	return c.json({post});
 })
 
 bookRouter.get('/blogs', async (c) => {
