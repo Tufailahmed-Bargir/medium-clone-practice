@@ -31,7 +31,7 @@ bookRouter.use(async (c, next) => {
 	await next()
 });
 
-bookRouter.post('/post', async (c) => {
+bookRouter.post('/create', async (c) => {
 	try {
 		const userId = c.get('userId');
 	const prisma = new PrismaClient({
@@ -57,11 +57,14 @@ bookRouter.post('/post', async (c) => {
 		}
 	});
 	return c.json({
-		id: post.id
+		msg:"blog created success",
+		success:true,
+		post
 	});
 	} catch (error) {
 		return c.json({
-			msg:"error found"
+			// @ts-expect-error error found
+			msg:"error found"+error.message
 		});
 	}
 })
