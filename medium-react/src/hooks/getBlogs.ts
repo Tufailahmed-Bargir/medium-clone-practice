@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { BACKEND_URL } from "../config";
+import { useRecoilState } from "recoil";
+import { blogsState } from "../stores/atoms/blog";
 
 export function useGetBlogs() {
-  const [blogs, setBlogs] = useState([]);
+  const [blogs, setBlogs] = useRecoilState(blogsState)
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -23,6 +25,8 @@ export function useGetBlogs() {
         setBlogs(response.data.posts);
       } catch (err: any) {
         setError(err.message);
+        console.log('error found', err.message);
+        
       } finally {
         setLoading(false);
       }

@@ -3,15 +3,21 @@ import SignUpForm from "./components/Signup";
 import SignInForm from "./components/Signin";
 import BlogPublishForm from "./components/CreateBlog";
 import Blogs from "./components/Blogs";
+
+ 
+ 
  
 import BlogPost from "./components/FullBlogCard";
  
 import Testing from "./components/Testing";
+import { RecoilRoot } from "recoil";
  
 
 export default function App() {
   
   return (
+    <RecoilRoot>
+
     <Router>
       
 
@@ -26,9 +32,13 @@ export default function App() {
        
       </Routes>
     </Router>
+    </RecoilRoot>
   );
 }
 
-export function Home(){
+function Home(){
   return <div>this is home page</div>
 }
+ 
+
+  
