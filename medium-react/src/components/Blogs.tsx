@@ -7,30 +7,39 @@ interface BlogCardProps{
     id: number;
 }
  
-import {useGetBlogs} from "../hooks/getBlogs";
+import { useRecoilStateLoadable} from "recoil";
+// import {useGetBlogs} from "../hooks/getBlogs";
 import { BlogCard } from "./BlogCard";
  
 import Testing from "./Testing";
+import { blogsState } from "../stores/atoms/atom";
+// import { blogsState } from "../stores/atoms/blog";
  
 interface BlogCardProps{
-    authorId: string;
-    title: string;
-    desc: string;
-    publish: boolean;
-    id: number;
+    
+        id: number;
+        title: string;
+        desc: string;
+        publish: boolean;
+        authorId: string;
+        createdAt: string;
+        updatedAt: string;
+     
 }
 export default function Blogs() {
-   const{ blogs, loading} = useGetBlogs()
-      if(loading){
+    const [blogs] = useRecoilStateLoadable(blogsState)
+//    const{  loading} = useGetBlogs()
+      if(blogs.state ==='loading'){
         return <Testing />
          
       }
+      console.log( blogs.state);
       
       
     return (
         <div className="flex flex-col justify-center items-center">
            
-            {blogs.map((data:BlogCardProps)=>{
+            {blogs.contents.map((data:BlogCardProps)=>{
                 return <BlogCard 
                 title={data.title}
                 authorname={data.authorId}
@@ -42,5 +51,6 @@ export default function Blogs() {
  
 
         </div>
+         
     );
 }

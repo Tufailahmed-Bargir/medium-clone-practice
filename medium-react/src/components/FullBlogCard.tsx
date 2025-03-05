@@ -1,18 +1,19 @@
 import { useParams } from "react-router-dom"
-import { useGetSingleBlog } from "../hooks/getBlogs"
-import { BlogSkeleton } from "./Skeleton"
+ 
+import { useRecoilStateLoadable} from "recoil";
+import { singleBlogAtom } from "../stores/atoms/atom";
+import { BlogSkeleton } from "./Skeleton";
+ 
 
  
 export default  function BlogPost( ) {
     const {id} = useParams()
     console.log('id which is getting passed is ', id, typeof(id));
     
-   const {blog, loading} = useGetSingleBlog({
-    id:id||""
-   })
+  const [blog] = useRecoilStateLoadable(singleBlogAtom(id||""))
    console.log('single blog is', blog);
    
-   if(loading){
+   if(blog.state === 'loading'){
     return <div className="flex justify-center items-center font-bold h-screen">
         <BlogSkeleton />
     </div>
@@ -21,7 +22,7 @@ export default  function BlogPost( ) {
     return (
       <article className="max-w-[900px] mx-auto px-6 py-8">
         <h1 className="text-[2.75rem] font-black leading-tight tracking-tight text-black mb-1">
-           {blog?.title}
+           {blog?.contents.title}
         </h1>
         {/* <h1>single blog is {JSON.stringify(blog)}</h1> */}
   
@@ -31,7 +32,7 @@ export default  function BlogPost( ) {
   
         <div className="space-y-4 mb-8">
           <p className="text-gray-600 text-[1.0625rem] leading-[1.6]">
-            {blog?.desc}
+            {blog?.contents.desc}
           </p>
          
         
